@@ -1,4 +1,4 @@
-package Game;
+package Components;
 
 import org.lwjgl.stb.STBTTAlignedQuad;
 import org.lwjgl.stb.STBTTBakedChar;

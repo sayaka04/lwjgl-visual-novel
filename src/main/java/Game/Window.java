@@ -1,5 +1,11 @@
 package Game;
 
+import Components.Button;
+import Components.Sound;
+import Components.Renderer;
+import Components.Texture;
+import Components.TextRenderer;
+import StateMachine.State;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -26,6 +32,8 @@ public class Window {
 
     private static Window window = null;
 
+
+
     private Window(){
         this.width = 1920;
         this.height = 1080;
@@ -47,6 +55,8 @@ public class Window {
         if (!GLFW.glfwInit()){
             throw new IllegalStateException("Unable to initialize GLFW");
         }
+
+State.current.enter();
 
         // Configure GLFW
         GLFW.glfwDefaultWindowHints();
@@ -126,6 +136,11 @@ public class Window {
                 if (myStartButton.checkClick(mouseX, mouseY)) {
 
                     System.out.println("Button Clicked! Hiding button now...");
+                    clickSound.play();
+
+                    State.current = State.menu;
+                    State.current.enter();
+
 
                     // TURN THE BUTTON OFF!
                     // This stops it from drawing AND stops the ghost clicks!
@@ -136,6 +151,9 @@ public class Window {
 
                     System.out.println("Button Clicked! Yay so simple to use hahaha...");
                     clickSound.play();
+
+                    State.current = State.game;
+                    State.current.enter();
                 }
             }
         });
@@ -208,11 +226,17 @@ public class Window {
     Sound clickSound;
 
     public void loop() {
+
+
+
         double timePerFrame = 1.0 / 60.0;
         double lastTime = GLFW.glfwGetTime();
 
         while (!GLFW.glfwWindowShouldClose(this.glfwWindow)) {
             double currentTime = GLFW.glfwGetTime();
+
+
+//            CurrentState.getInstance().update();
 
             // ONLY run this code if 1/60th of a second has passed
             if (currentTime - lastTime >= timePerFrame) {
@@ -222,6 +246,8 @@ public class Window {
                 glClear(GL_COLOR_BUFFER_BIT);
 
                 i += 1; // Now this happens EXACTLY 60 times a second
+
+                State.current.update();
 
                 // --- DRAW EVERYTHING ---
                 renderer.drawImage(myBackground, 0, 0, 1920, 1080);

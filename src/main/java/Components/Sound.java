@@ -1,7 +1,8 @@
-package Game;
+package Components;
 
 import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryStack;
+
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 

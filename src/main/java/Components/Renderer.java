@@ -1,4 +1,4 @@
-package Game;
+package Components;
 
 import org.lwjgl.opengl.GL11;
 
