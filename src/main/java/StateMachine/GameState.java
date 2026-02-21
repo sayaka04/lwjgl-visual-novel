@@ -1,5 +1,7 @@
 package StateMachine;
 
+import Game.Window;
+
 public class GameState extends State {
 
     @Override
@@ -8,7 +10,7 @@ public class GameState extends State {
     }
 
     @Override
-    public void update() {
+    public void update(Window window) {
         System.out.println("Updating GameState");
     }
 
