@@ -27,7 +27,7 @@ public class WindowHelper {
 
     protected int width, height;
     protected String title;
-    protected long glfwWindow;
+    public long glfwWindow;
 
     protected double mouseX = 0;
     protected double mouseY = 0;

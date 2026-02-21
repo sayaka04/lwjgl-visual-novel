@@ -7,27 +7,41 @@ import org.lwjgl.opengl.GL11;
 
 public class MainMenuState extends State {
 
-    private TextRenderer myFont; // Add this!
-    private Button myStartButton; // Add this!
-    private Button anotherButton; // Add this!
+    private TextRenderer titleTextFont; // Add this!
+    private TextRenderer buttonTextFont; // Add this!
+
+    private Button newGameButton; // Add this!
+    private Button loadGameButton; // Add this!
+    private Button settingButton; // Add this!
+    private Button exitGameButton; // Add this!
+
+    private BackgroundMusic backgroundMusic;
+    private Sound hoverSound;
     private Sound clickSound;
 
-    private Texture myBackground ;
+    private Texture background;
+
     private Renderer renderer ;
 
     @Override
-    public void init() {
+    public void init(Window window) {
         // Init Font
-        myFont = new TextRenderer("C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 48);
+        titleTextFont = new TextRenderer("C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 120);
+        buttonTextFont = new TextRenderer("C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 48);
 
         // Init Sound...
+        backgroundMusic = new BackgroundMusic("C:\\Users\\Acer\\OneDrive\\Desktop\\bgm\\frozen_winter.ogg");
+        hoverSound = new Sound("C:\\Users\\Acer\\OneDrive\\Desktop\\bertsz__game-ui-sounds.ogg");
         clickSound = new Sound("C:\\Users\\Acer\\OneDrive\\Desktop\\edited683098__florianreichelt__click.ogg");
 
         // Init Button: create a button at X: 500, Y: 300. Width: 200, Height: 100.
-        myStartButton = new Button(500, 300, 200, 100, clickSound);
-        anotherButton = new Button(0, 600, 200, 100, clickSound);
+        newGameButton = new Button((1920/2) - 150, 320, 300, 50, hoverSound, "New Game", buttonTextFont);
+        loadGameButton = new Button((1920/2) - 150, 390, 300, 50, hoverSound, "Load", buttonTextFont);
+        settingButton = new Button((1920/2) - 150, 460, 300, 50, hoverSound, "Settings", buttonTextFont);
+        exitGameButton = new Button((1920/2) - 150, 530, 300, 50, hoverSound, "Exit", buttonTextFont);
 
-        myBackground = new Texture("C:\\Users\\Acer\\OneDrive\\Desktop\\miki.png");
+        background = new Texture("C:\\Users\\Acer\\OneDrive\\Desktop\\single bedroom.jpg");
+
         renderer = new Renderer();
 
     }
@@ -35,26 +49,30 @@ public class MainMenuState extends State {
     @Override
     public void enter() {
         System.out.println("Entering MainMenuState");
+        backgroundMusic.play();
+
     }
 
     @Override
     public void update(Window window) {
 
-        renderer.drawImage(myBackground, 0, 0, 1920, 1080);
-        renderer.drawImage(myBackground, 500, 500, 320, 320);
+        renderer.drawImage(background, 0, 0, 1920, 1080);
 
-        if (myStartButton.isVisible) {
-            myStartButton.draw(window.getMouseX(), window.getMouseY());
+        if (newGameButton.isVisible) {
+            newGameButton.draw(window.getMouseX(), window.getMouseY());
         }
-        if (anotherButton.isVisible) {
-            anotherButton.draw(window.getMouseX(), window.getMouseY());
+        if (loadGameButton.isVisible) {
+            loadGameButton.draw(window.getMouseX(), window.getMouseY());
+        }
+        if (settingButton.isVisible) {
+            settingButton.draw(window.getMouseX(), window.getMouseY());
+        }
+        if (exitGameButton.isVisible) {
+            exitGameButton.draw(window.getMouseX(), window.getMouseY());
         }
 
-
-
-//        System.out.println("Updating MainMenuState");
-        GL11.glColor3f(1.0f, 1.0f, 0.0f);                   // 1. Change color to YELLOW
-        myFont.drawText("Hello Visual Novel!", 100, 100);   // 2. Draw your text
+        GL11.glColor3f(0.0f, 0.0f, 0.25f);                   // 1. Change color to BLACK
+        titleTextFont.drawText("A Certain Visual Novel", (1920/2)-400, 20);   // 2. Draw your text
         GL11.glColor3f(1.0f, 1.0f, 1.0f);                   // 3. THE FIX: Reset the color back to WHITE immediately!
     }
 
@@ -65,22 +83,25 @@ public class MainMenuState extends State {
 
     @Override
     public void mouseClickHandler(Window window){
-        if (myStartButton.checkClick(window.getMouseX(), window.getMouseY())) {
-
-            System.out.println("Button Clicked! Hiding button now...");
+        if (newGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
+            System.out.println("Button Clicked! Starting new game...");
+            backgroundMusic.stop();
             clickSound.play();
-
-            State.current = State.menu;
-            State.current.enter();
-
-            // TURN THE BUTTON OFF!
-            myStartButton.isVisible = false;    // This stops it from drawing AND stops the ghost clicks!
+             State.current = State.game;
+             State.current.enter();
         }
-        else if (anotherButton.checkClick(window.getMouseX(), window.getMouseY())) {
+        else if (loadGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
             System.out.println("Button Clicked! Yay so simple to use hahaha...");
             clickSound.play();
-            // State.current = State.game;
-            // State.current.enter();
+        }
+        else if (settingButton.checkClick(window.getMouseX(), window.getMouseY())) {
+            System.out.println("Button Clicked! Yay so simple to use hahaha...");
+            clickSound.play();
+        }
+        else if (exitGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
+            clickSound.play();
+            System.out.println("Escape pressed! Closing the game...");
+            GLFW.glfwSetWindowShouldClose(window.glfwWindow, true);   // This tells the while loop to stop, safely closing the game
         }
     }
 
@@ -90,7 +111,8 @@ public class MainMenuState extends State {
             System.out.println("Spacebar pressed! Ready to advance text.");
         }
         else if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
-            System.out.println("Escape pressed!");
+            System.out.println("Escape pressed! Closing the game...");
+            GLFW.glfwSetWindowShouldClose(window.glfwWindow, true);   // This tells the while loop to stop, safely closing the game
         }
         else if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_PRESS) {
             System.out.println("The 'A' key was pressed!");

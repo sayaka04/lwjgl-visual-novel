@@ -6,7 +6,7 @@ public abstract class State {
 
     public static State current, menu, game;
 
-    public void init(){}
+    public void init(Window window){}
 
     public void enter() {}
 

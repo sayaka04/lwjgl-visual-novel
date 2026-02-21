@@ -1,29 +1,40 @@
 package Components;
+
 import org.lwjgl.opengl.GL11;
 
-public class Button {
+public class Dialogue {
+
+
     public float x, y, width, height;
-    public String text;
     public boolean isVisible = true;
-    public TextRenderer textRenderer;
+
     // Memory for the "One-Shot" hover trigger
     private boolean wasHoveredLastFrame = false;
 
     // Let the button own its sound!
-    private Sound hoverSound;
+    private final Sound hoverSound;
 
-    // Constructor
-    public Button(float x, float y, float width, float height, Sound hoverSound, String text, TextRenderer textRenderer) {
+    private final TextRenderer nameTextRenderer;
+    private final TextRenderer dialogueTextRenderer;
+
+    private String name = "";
+    private String dialogueText = "";
+
+    public void setName(String name) {this.name = name;}
+    public void setDialogueText(String dialogueText) {this.dialogueText = dialogueText;}
+
+
+
+    public Dialogue(float x, float y, float width, float height, Sound hoverSound, String ttfPath, int fontHeight) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.hoverSound = hoverSound;
-        this.text = text;
-        this.textRenderer = textRenderer;
+        this.nameTextRenderer = new TextRenderer(ttfPath, 60);
+        this.dialogueTextRenderer = new TextRenderer(ttfPath, fontHeight);
     }
 
-    // The Button now draws ITSELF and checks its own hover state!
     public void draw(double mouseX, double mouseY) {
         if (!isVisible) return; // Don't do anything if the button is hidden
 
@@ -47,9 +58,9 @@ public class Button {
 
         // Color it based on the hover state we just calculated
         if (currentlyHovered) {
-            GL11.glColor4f(0.0f, 0.0f, 0.25f, 0.75f); // Yellow (Hover)
+            GL11.glColor4f(0.02f, 0.02f, 0.02f, 0.65f); // Yellow (Hover)
         } else {
-            GL11.glColor4f(0.0f, 0.0f, 0.25f, 0.65f); // Blue (Normal)
+            GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.65f); // Blue (Normal)
         }
 
         GL11.glVertex2f(x, y);
@@ -58,13 +69,14 @@ public class Button {
         GL11.glVertex2f(x, y + height);
 
         GL11.glEnd();
+
+        GL11.glColor3f(1.0f, 1.0f, 1.0f); // set color to white
+        nameTextRenderer.drawText(name, x+25,y);
+        GL11.glColor3f(0.80f, 0.80f, 0.80f); // set color to slightly darker
+        dialogueTextRenderer.drawText(dialogueText, x+35,y+60);
         GL11.glColor3f(1.0f, 1.0f, 1.0f); // Reset color to white
-        textRenderer.drawText(text, x+15, y-15);
+
     }
 
-    // Checking clicks remains simple
-    public boolean checkClick(double mouseX, double mouseY) {
-        if (!isVisible) return false;
-        return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
-    }
+
 }

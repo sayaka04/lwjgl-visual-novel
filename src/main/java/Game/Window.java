@@ -66,10 +66,12 @@ public class Window extends WindowHelper{
 
         // Initialize StateMachine and States
         State.menu = new MainMenuState();
-        State.menu.init();
+        State.menu.init(this);
         State.game = new GameState();
-        State.game.init();
+        State.game.init(this);
+
         State.current = State.menu;
+        State.menu.enter();
 
         // Initialize Inputs
         // 1. Listen for Mouse Movement
