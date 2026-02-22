@@ -66,4 +66,23 @@ public class EngineCore {
             e.printStackTrace();
         }
     }
+
+    public static void loadChapter(String filename) {
+        Gson gson = new Gson();
+        try {
+            System.out.println("Loading new chapter: " + filename);
+
+            // Reads the new JSON file from your assets folder!
+            currentChapter = gson.fromJson(new FileReader("assets/" + filename), StoryData.class);
+
+            // Automatically start at node "1" of the new chapter
+            currentChapter.setScriptDialogue("1");
+
+            System.out.println("Chapter loaded successfully!");
+
+        } catch (Exception e) {
+            System.err.println("CRITICAL ERROR: Could not find chapter file: " + filename);
+            e.printStackTrace();
+        }
+    }
 }

@@ -235,46 +235,76 @@ public class GameState extends State {
                 clickSound.play();
 
                 // Stop dynamic audio when returning to menu
-                if (currentBGM != null) currentBGM.stop();
-                if (currentAmbience != null) currentAmbience.stop();
-
+                if (currentBGM != null) {
+                    currentBGM.stop();
+                    currentBGM = null;
+                }
+                if (currentAmbience != null) {
+                    currentAmbience.stop();
+                    currentAmbience = null;
+                }
+                activeVisuals.clear();
+                State.current.exit();
                 State.current = State.menu;
                 State.current.enter(window);
+                return;
             }
             else if (tabSaveButton.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
+                return;
             }
             else if (tabLoadButton.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
+                return;
             }
             else if (tabExitButton.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
                 GLFW.glfwSetWindowShouldClose(window.glfwWindow, true);
+                return;
             }
         }
 
         // Handle Choices Clicks
-        if(hasChoices && !tabIsVisible) {
+        if(hasChoices) {
             if (option1Button.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
                 EngineCore.currentChapter.setScriptDialogue(EngineCore.currentChapter.scriptDialogue.choices.get(0).target);
                 this.scriptUpdate(window);
+                return;
             }
             else if (option2Button.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
                 EngineCore.currentChapter.setScriptDialogue(EngineCore.currentChapter.scriptDialogue.choices.get(1).target);
                 this.scriptUpdate(window);
+                return;
             }
             else if (option3Button.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
                 EngineCore.currentChapter.setScriptDialogue(EngineCore.currentChapter.scriptDialogue.choices.get(2).target);
                 this.scriptUpdate(window);
+                return;
             }
             else if (option4Button.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
                 EngineCore.currentChapter.setScriptDialogue(EngineCore.currentChapter.scriptDialogue.choices.get(3).target);
                 this.scriptUpdate(window);
+                return;
             }
+        }
+
+        if(EngineCore.currentChapter.scriptDialogue.hasProceedTo()){
+            clickSound.play();
+            System.out.println("Proceed to found!");
+            EngineCore.currentChapter.setScriptDialogue(EngineCore.currentChapter.scriptDialogue.proceedTo.toString());
+            this.scriptUpdate(window);
+        }
+        else if (EngineCore.currentChapter.scriptDialogue.hasLoadNextScript()) {
+            clickSound.play();
+            System.out.println("Ready to load new chapter: " + EngineCore.currentChapter.scriptDialogue.loadNextScript);
+            String nextFile = EngineCore.currentChapter.scriptDialogue.loadNextScript;
+            EngineCore.loadChapter(nextFile); // Load the new JSON
+            EngineCore.currentChapter.setScriptDialogue("1"); // Start at Node 1 of the new file
+            this.scriptUpdate(window); // Update the screen!
         }
     }
 
