@@ -1,9 +1,14 @@
 package StateMachine;
 
 import Components.*;
+import Engine.EngineCore;
 import Game.Window;
+import com.google.gson.Gson;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 public class MainMenuState extends State {
 
@@ -47,7 +52,7 @@ public class MainMenuState extends State {
     }
 
     @Override
-    public void enter() {
+    public void enter(Window window) {
         System.out.println("Entering MainMenuState");
         backgroundMusic.play();
 
@@ -87,8 +92,10 @@ public class MainMenuState extends State {
             System.out.println("Button Clicked! Starting new game...");
             backgroundMusic.stop();
             clickSound.play();
-             State.current = State.game;
-             State.current.enter();
+            // 1. Read the JSON file and convert it directly into our Java Object
+            EngineCore.startNewGame();
+            State.current = State.game;
+            State.current.enter(window);
         }
         else if (loadGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
             System.out.println("Button Clicked! Yay so simple to use hahaha...");

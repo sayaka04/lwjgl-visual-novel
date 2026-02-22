@@ -40,3 +40,10 @@ dependencies {
     implementation ("org.lwjgl", "lwjgl-opengl", classifier = lwjglNatives)
     implementation ("org.lwjgl", "lwjgl-stb", classifier = lwjglNatives)
 }
+
+
+
+// Google Gson for JSON parsing
+dependencies {
+    implementation("com.google.code.gson:gson:2.10.1")
+}

@@ -23,6 +23,10 @@ public class Button {
         this.textRenderer = textRenderer;
     }
 
+    public void setText(String newText) {
+        this.text = newText;
+    }
+
     // The Button now draws ITSELF and checks its own hover state!
     public void draw(double mouseX, double mouseY) {
         if (!isVisible) return; // Don't do anything if the button is hidden

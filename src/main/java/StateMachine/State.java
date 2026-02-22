@@ -8,7 +8,7 @@ public abstract class State {
 
     public void init(Window window){}
 
-    public void enter() {}
+    public void enter(Window window) {}
 
     public void update(Window window) {}
 

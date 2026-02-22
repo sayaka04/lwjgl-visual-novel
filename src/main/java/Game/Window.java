@@ -5,6 +5,7 @@ import Components.Sound;
 import Components.Renderer;
 import Components.Texture;
 import Components.TextRenderer;
+import Engine.EngineCore;
 import StateMachine.GameState;
 import StateMachine.MainMenuState;
 import StateMachine.State;
@@ -59,10 +60,11 @@ public class Window extends WindowHelper{
         // --- OpenAL Settings ---
         setupOpenAL();
 
-
         // +------------------------+
         // |    MAIN CONTENTS HERE  |
         // +------------------------+
+        // 1. LOAD ALL JSON DATA FIRST (Sequential!)
+        EngineCore.initEngine();
 
         // Initialize StateMachine and States
         State.menu = new MainMenuState();
@@ -71,7 +73,7 @@ public class Window extends WindowHelper{
         State.game.init(this);
 
         State.current = State.menu;
-        State.menu.enter();
+        State.menu.enter(window);
 
         // Initialize Inputs
         // 1. Listen for Mouse Movement

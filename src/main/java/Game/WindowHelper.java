@@ -1,5 +1,6 @@
 package Game;
 
+import Data.StoryData;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.openal.AL;
