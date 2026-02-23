@@ -1,0 +1,69 @@
+{
+  "script": {
+    "1": {
+      "setAudio": {
+        "BackgroundMusic": "bgm_winter"
+      },
+      "setVisuals": {
+        "Background": "bg_master_bedroom"
+      },
+      "text": "(You wake up with a shiver. The bedroom is freezing, and the house is completely silent.)",
+      "proceedTo": "2"
+    },
+
+    "2": {
+      "speaker": "System",
+      "text": "Where should you look for Miki?",
+      "choices": [
+        { "text": "Check the Lounge", "target": "3" },
+        { "text": "Check the Kitchen", "target": "4" }
+      ]
+    },
+
+    "3": {
+      "setAudio": {
+        "BackgroundMusic": "bgm_theme"
+      },
+      "setVisuals": {
+        "Background": "bg_lounge",
+        "Middle": "char_miki"
+      },
+      "speaker": "Miki",
+      "text": "Oh, hey! Good morning! I was just cleaning up the lounge.",
+      "proceedTo": "5"
+    },
+
+    "4": {
+      "setAudio": {
+        "BackgroundMusic": "bgm_theme"
+      },
+      "setVisuals": {
+        "Background": "bg_kitchen",
+        "Middle": "char_miki"
+      },
+      "speaker": "Miki",
+      "text": "Ta-da! Good morning! I'm in here getting breakfast ready!",
+      "proceedTo": "5"
+    },
+
+    "5": {
+      "speaker": "Miki",
+      "text": "Did you sleep well? I was thinking about making pancakes.",
+      "proceedTo": "6"
+    },
+
+    "6": {
+      "setVisuals": {
+        "Middle": "none"
+      },
+      "text": "(Miki smiles and turns away to start working. The warm atmosphere completely melts away the winter chill.)",
+      "proceedTo": "7"
+    },
+
+    "7": {
+      "speaker": "System",
+      "text": "Chapter 1 Complete! Press to load Chapter 2...",
+      "loadNextScript": "scene2.json"
+    }
+  }
+}

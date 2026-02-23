@@ -3,12 +3,8 @@ package StateMachine;
 import Components.*;
 import Engine.EngineCore;
 import Game.Window;
-import com.google.gson.Gson;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 public class MainMenuState extends State {
 
@@ -31,21 +27,23 @@ public class MainMenuState extends State {
     @Override
     public void init(Window window) {
         // Init Font
-        titleTextFont = new TextRenderer("C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 120);
-        buttonTextFont = new TextRenderer("C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 48);
+        titleTextFont = new TextRenderer("assets/ui/font.ttf", 120);
+        buttonTextFont = new TextRenderer("assets/ui/font.ttf", 48);
 
         // Init Sound...
-        backgroundMusic = new BackgroundMusic("C:\\Users\\Acer\\OneDrive\\Desktop\\bgm\\frozen_winter.ogg");
-        hoverSound = new Sound("C:\\Users\\Acer\\OneDrive\\Desktop\\bertsz__game-ui-sounds.ogg");
-        clickSound = new Sound("C:\\Users\\Acer\\OneDrive\\Desktop\\edited683098__florianreichelt__click.ogg");
+        backgroundMusic = new BackgroundMusic("assets/ui/bgm.ogg");
+        hoverSound = new Sound("assets/ui/hover.ogg");
+        clickSound = new Sound("assets/ui/click.ogg");
+
+        float [] rgba = {0.0f, 0.0f, 0.25f, 0.65f};
 
         // Init Button: create a button at X: 500, Y: 300. Width: 200, Height: 100.
-        newGameButton = new Button((1920/2) - 150, 320, 300, 50, hoverSound, "New Game", buttonTextFont);
-        loadGameButton = new Button((1920/2) - 150, 390, 300, 50, hoverSound, "Load", buttonTextFont);
-        settingButton = new Button((1920/2) - 150, 460, 300, 50, hoverSound, "Settings", buttonTextFont);
-        exitGameButton = new Button((1920/2) - 150, 530, 300, 50, hoverSound, "Exit", buttonTextFont);
+        newGameButton = new Button((1920/2) - 150, 320, 300, 50, hoverSound, "New Game", buttonTextFont, rgba);
+        loadGameButton = new Button((1920/2) - 150, 390, 300, 50, hoverSound, "Load", buttonTextFont, rgba);
+        settingButton = new Button((1920/2) - 150, 460, 300, 50, hoverSound, "Settings (Unused)", buttonTextFont, rgba);
+        exitGameButton = new Button((1920/2) - 150, 530, 300, 50, hoverSound, "Exit", buttonTextFont, rgba);
 
-        background = new Texture("C:\\Users\\Acer\\OneDrive\\Desktop\\single bedroom.jpg");
+        background = new Texture("assets/ui/bg_main.jpg");
 
         renderer = new Renderer();
 
@@ -83,13 +81,13 @@ public class MainMenuState extends State {
 
     @Override
     public void exit() {
-        super.exit();
+        backgroundMusic.stop();
     }
 
     @Override
     public void mouseClickHandler(Window window){
         if (newGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
-            System.out.println("Button Clicked! Starting new game...");
+            System.out.println("New Game Clicked! Starting new game...");
             backgroundMusic.stop();
             clickSound.play();
             // 1. Read the JSON file and convert it directly into our Java Object
@@ -98,7 +96,9 @@ public class MainMenuState extends State {
             State.current.enter(window);
         }
         else if (loadGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
-            System.out.println("Button Clicked! Yay so simple to use hahaha...");
+            System.out.println("Load Clicked!");
+            State.current = State.menu_load;
+            State.menu_load.enter(window);
             clickSound.play();
         }
         else if (settingButton.checkClick(window.getMouseX(), window.getMouseY())) {
@@ -107,22 +107,16 @@ public class MainMenuState extends State {
         }
         else if (exitGameButton.checkClick(window.getMouseX(), window.getMouseY())) {
             clickSound.play();
-            System.out.println("Escape pressed! Closing the game...");
+            System.out.println("Exit clicked! Closing the game...");
             GLFW.glfwSetWindowShouldClose(window.glfwWindow, true);   // This tells the while loop to stop, safely closing the game
         }
     }
 
     @Override
     public void keyPressedHandler(Window window, int key, int action) {
-        if (key == GLFW.GLFW_KEY_SPACE && action == GLFW.GLFW_PRESS) {
-            System.out.println("Spacebar pressed! Ready to advance text.");
-        }
-        else if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
+        if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
             System.out.println("Escape pressed! Closing the game...");
             GLFW.glfwSetWindowShouldClose(window.glfwWindow, true);   // This tells the while loop to stop, safely closing the game
-        }
-        else if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_PRESS) {
-            System.out.println("The 'A' key was pressed!");
         }
     }
 }

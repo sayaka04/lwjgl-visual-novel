@@ -44,8 +44,10 @@ public class StoryData {
     public DialogueNode scriptDialogue;
     public String currentScene;
     public String currentDialogue;
+    public String currentNodeId = "1";
 
     public void setScriptDialogue(String index){
+        this.currentNodeId = index;
         this.scriptDialogue = this.script.get(index);
     }
 }

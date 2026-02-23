@@ -11,9 +11,10 @@ public class Button {
 
     // Let the button own its sound!
     private Sound hoverSound;
+    float [] rgba = new float[4];
 
     // Constructor
-    public Button(float x, float y, float width, float height, Sound hoverSound, String text, TextRenderer textRenderer) {
+    public Button(float x, float y, float width, float height, Sound hoverSound, String text, TextRenderer textRenderer, float [] rgba) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -21,6 +22,7 @@ public class Button {
         this.hoverSound = hoverSound;
         this.text = text;
         this.textRenderer = textRenderer;
+        this.rgba = rgba;
     }
 
     public void setText(String newText) {
@@ -51,9 +53,9 @@ public class Button {
 
         // Color it based on the hover state we just calculated
         if (currentlyHovered) {
-            GL11.glColor4f(0.0f, 0.0f, 0.25f, 0.75f); // Yellow (Hover)
+            GL11.glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]+0.15f); // Yellow (Hover)
         } else {
-            GL11.glColor4f(0.0f, 0.0f, 0.25f, 0.65f); // Blue (Normal)
+            GL11.glColor4f(rgba[0], rgba[1], rgba[2], rgba[3]);
         }
 
         GL11.glVertex2f(x, y);

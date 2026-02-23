@@ -6,9 +6,7 @@ import Components.Renderer;
 import Components.Texture;
 import Components.TextRenderer;
 import Engine.EngineCore;
-import StateMachine.GameState;
-import StateMachine.MainMenuState;
-import StateMachine.State;
+import StateMachine.*;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -71,6 +69,14 @@ public class Window extends WindowHelper{
         State.menu.init(this);
         State.game = new GameState();
         State.game.init(this);
+        State.save = new SaveState();
+        State.save.init(this);
+
+        State.menu_load = new MenuLoadState();
+        State.menu_load.init(this);
+
+        State.ingame_load = new InGameLoadState();
+        State.ingame_load.init(this);
 
         State.current = State.menu;
         State.menu.enter(window);

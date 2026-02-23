@@ -21,6 +21,8 @@ public class EngineCore {
     public static Map<String, BackgroundMusic> music = new HashMap<>();
     public static Map<String, Sound> sounds = new HashMap<>();
 
+    public static String currentChapterFilename = "scene1.json"; // Default fallback
+
     public static void initEngine() {
         Gson gson = new Gson();
         try {
@@ -59,8 +61,11 @@ public class EngineCore {
         try {
             System.out.println("Starting Game... Loading Scene 1.");
 
+            currentChapterFilename = "scene1.json";
             currentChapter = gson.fromJson(new FileReader("assets/scene1.json"), StoryData.class);
             currentChapter.setScriptDialogue("1");
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +77,7 @@ public class EngineCore {
         try {
             System.out.println("Loading new chapter: " + filename);
 
-            // Reads the new JSON file from your assets folder!
+            currentChapterFilename = filename;      // Add this line!
             currentChapter = gson.fromJson(new FileReader("assets/" + filename), StoryData.class);
 
             // Automatically start at node "1" of the new chapter

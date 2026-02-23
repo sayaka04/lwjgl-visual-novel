@@ -4,7 +4,7 @@ import Game.Window;
 
 public abstract class State {
 
-    public static State current, menu, game;
+    public static State current, menu, game, save, menu_load, ingame_load;
 
     public void init(Window window){}
 

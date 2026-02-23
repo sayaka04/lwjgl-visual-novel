@@ -1,0 +1,56 @@
+{
+  "script": {
+    "1": {
+      "setVisuals": {
+        "Background": "bg_kitchen",
+        "Middle": "char_miki"
+      },
+      "text": "(A little while later...)",
+      "proceedTo": "2"
+    },
+
+    "2": {
+      "speaker": "Miki",
+      "text": "The pancakes are finally ready! Here you go.",
+      "choices": [
+        { "text": "Thanks, Miki! They look amazing.", "target": "3" },
+        { "text": "I hope you didn't burn them this time...", "target": "4" }
+      ]
+    },
+
+    "3": {
+      "speaker": "Miki",
+      "text": "Hehe, eat up before they get cold!",
+      "proceedTo": "5"
+    },
+
+    "4": {
+      "setAudio": {
+        "BackgroundMusic": "none"
+      },
+      "speaker": "Miki",
+      "text": "Hey! I only burned them that one time! So mean...",
+      "proceedTo": "5"
+    },
+
+    "5": {
+      "setAudio": {
+        "BackgroundMusic": "bgm_winter"
+      },
+      "setVisuals": {
+        "Background": "bg_lounge",
+        "Middle": "none"
+      },
+      "text": "(After breakfast, you move back to the lounge. The winter weather outside seems to be picking up again.)",
+      "proceedTo": "6"
+    },
+
+    "6": {
+      "setAudio": {
+        "SoundEffect": "sfx_IkkyuSan"
+      },
+      "speaker": "System",
+      "text": "End of Demo! :)"
+    }
+  }
+}

@@ -1,11 +1,17 @@
 package StateMachine;
 
 import Components.*;
+import Data.SaveData;
 import Engine.EngineCore;
 import Game.Window;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +24,10 @@ public class GameState extends State {
     // --- AUDIO MEMORY ---
     private BackgroundMusic currentBGM;      // Remembers playing BGM
     private BackgroundMusic currentAmbience; // Remembers playing Ambience
+
+    // These two lines are for the save file!
+    public String currentBgmId = "none";
+    public String currentAmbienceId = "none";
 
     // --- UI COMPONENTS ---
     private TextRenderer buttonTextFont;
@@ -44,24 +54,26 @@ public class GameState extends State {
     public void init(Window window) {
 
         // Init Font
-        buttonTextFont = new TextRenderer("C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 48);
+        buttonTextFont = new TextRenderer("assets/ui/font.ttf", 48);
 
         // Init UI Sounds (These are safe to leave hardcoded since they never change!)
-        hoverSound = new Sound("C:\\Users\\Acer\\OneDrive\\Desktop\\bertsz__game-ui-sounds.ogg");
-        clickSound = new Sound("C:\\Users\\Acer\\OneDrive\\Desktop\\edited683098__florianreichelt__click.ogg");
+        hoverSound = new Sound("assets/ui/hover.ogg");
+        clickSound = new Sound("assets/ui/click.ogg");
+
+        float [] rgba = {0.0f, 0.0f, 0.25f, 0.65f};
 
         // Init Buttons
-        option1Button = new Button((1920/2) - 250, 250, 500, 50, hoverSound, "Option 1", buttonTextFont);
-        option2Button = new Button((1920/2) - 250, 320, 500, 50, hoverSound, "Option 2", buttonTextFont);
-        option3Button = new Button((1920/2) - 250, 390, 500, 50, hoverSound, "Option 3", buttonTextFont);
-        option4Button = new Button((1920/2) - 250, 460, 500, 50, hoverSound, "Option 4", buttonTextFont);
+        option1Button = new Button((1920/2) - 250, 250, 500, 50, hoverSound, "Option 1", buttonTextFont, rgba);
+        option2Button = new Button((1920/2) - 250, 320, 500, 50, hoverSound, "Option 2", buttonTextFont, rgba);
+        option3Button = new Button((1920/2) - 250, 390, 500, 50, hoverSound, "Option 3", buttonTextFont, rgba);
+        option4Button = new Button((1920/2) - 250, 460, 500, 50, hoverSound, "Option 4", buttonTextFont, rgba);
 
-        tabMenuButton = new Button(0, 0, 150, 50, hoverSound, "Menu", buttonTextFont);
-        tabSaveButton = new Button(150, 0, 150, 50, hoverSound, "Save", buttonTextFont);
-        tabLoadButton = new Button(300, 0, 150, 50, hoverSound, "Load", buttonTextFont);
-        tabExitButton = new Button(450, 0, 150, 50, hoverSound, "Exit", buttonTextFont);
+        tabMenuButton = new Button(0, 0, 150, 50, hoverSound, "Menu", buttonTextFont, rgba);
+        tabSaveButton = new Button(150, 0, 150, 50, hoverSound, "Save", buttonTextFont, rgba);
+        tabLoadButton = new Button(300, 0, 150, 50, hoverSound, "Load", buttonTextFont, rgba);
+        tabExitButton = new Button(450, 0, 150, 50, hoverSound, "Exit", buttonTextFont, rgba);
 
-        dialogue = new Dialogue(0, 780, 1920, 300, hoverSound, "C:\\Users\\Acer\\OneDrive\\Desktop\\Jersey10-Regular.ttf", 48);
+        dialogue = new Dialogue(0, 780, 1920, 300, hoverSound, "assets/ui/font.ttf", 48);
         dialogue.isVisible = false;
 
         renderer = new Renderer();
@@ -93,7 +105,7 @@ public class GameState extends State {
             // Handle Background Music
             if (setAudio.containsKey("BackgroundMusic")) {
                 String bgmId = setAudio.get("BackgroundMusic");
-
+                this.currentBgmId = bgmId;
                 if (bgmId.equalsIgnoreCase("none")) {
                     if (currentBGM != null) { currentBGM.stop(); currentBGM = null; }
                 } else {
@@ -109,7 +121,7 @@ public class GameState extends State {
             // Handle Ambience
             if (setAudio.containsKey("Ambience")) {
                 String ambId = setAudio.get("Ambience");
-
+                this.currentAmbienceId = ambId;
                 if (ambId.equalsIgnoreCase("none")) {
                     if (currentAmbience != null) { currentAmbience.stop(); currentAmbience = null; }
                 } else {
@@ -251,10 +263,15 @@ public class GameState extends State {
             }
             else if (tabSaveButton.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
+                saveScreenshot("assets/save/temp_screenshot.png");
+                State.current = State.save;
+                State.current.enter(window);
                 return;
             }
             else if (tabLoadButton.checkClick(window.getMouseX(), window.getMouseY())) {
                 clickSound.play();
+                State.current = State.ingame_load;
+                State.current.enter(window);
                 return;
             }
             else if (tabExitButton.checkClick(window.getMouseX(), window.getMouseY())) {
@@ -332,6 +349,79 @@ public class GameState extends State {
         else if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_PRESS) {
             tabIsVisible = !tabIsVisible;
             System.out.println("Escape pressed! toggle: " + tabIsVisible);
+        }
+    }
+
+
+    // --- SAVE / LOAD HELPERS ---
+
+    // Packages current memory into a SaveData object
+    public SaveData createSaveData() {
+        SaveData save = new SaveData();
+        save.chapterFile = EngineCore.currentChapterFilename;
+        save.currentNodeId = EngineCore.currentChapter.currentNodeId;
+        save.activeVisuals = new HashMap<>(this.activeVisuals); // Copy it safely
+        save.currentBgmId = this.currentBgmId;
+        save.currentAmbienceId = this.currentAmbienceId;
+        return save;
+    }
+
+    // Injects loaded data back into the game
+    public void restoreSaveData(SaveData save) {
+        this.activeVisuals = save.activeVisuals;
+        this.currentBgmId = save.currentBgmId;
+        this.currentAmbienceId = save.currentAmbienceId;
+
+        // Stop current audio before overwriting
+        if (currentBGM != null) currentBGM.stop();
+        if (currentAmbience != null) currentAmbience.stop();
+
+        // Restore BGM perfectly
+        if (!currentBgmId.equals("none") && EngineCore.music.containsKey(currentBgmId)) {
+            currentBGM = EngineCore.music.get(currentBgmId);
+            currentBGM.play();
+        } else {
+            currentBGM = null;
+        }
+
+        // Restore Ambience perfectly
+        if (!currentAmbienceId.equals("none") && EngineCore.music.containsKey(currentAmbienceId)) {
+            currentAmbience = EngineCore.music.get(currentAmbienceId);
+            currentAmbience.play();
+        } else {
+            currentAmbience = null;
+        }
+    }
+
+    // Add this method to the bottom of GameState.java
+    private void saveScreenshot(String filename) {
+        int width = 1920; // Your window width
+        int height = 1080; // Your window height
+
+        // 1. Create a buffer to hold the screen data
+        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
+
+        // 2. Tell OpenGL to read the screen into our buffer!
+        GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+        // 3. Convert the OpenGL buffer into a Java Image
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int i = (x + (width * y)) * 4;
+                int r = buffer.get(i) & 0xFF;
+                int g = buffer.get(i + 1) & 0xFF;
+                int b = buffer.get(i + 2) & 0xFF;
+                // OpenGL reads bottom-to-top, so we have to flip the Y coordinate!
+                image.setRGB(x, height - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+            }
+        }
+
+        // 4. Save it as a PNG!
+        try {
+            ImageIO.write(image, "PNG", new File(filename));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

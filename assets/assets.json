@@ -1,0 +1,13 @@
+{
+  "audio": {
+    "bgm_theme": "hope.ogg",
+    "bgm_winter": "frozen_winter.ogg",
+    "sfx_IkkyuSan": "IkkyuSan.ogg"
+  },
+  "visuals": {
+    "bg_kitchen": "kitchen.jpg",
+    "bg_lounge": "lounge.jpg",
+    "bg_master_bedroom": "master_bedroom.jpg",
+    "char_miki": "miki.png"
+  }
+}
