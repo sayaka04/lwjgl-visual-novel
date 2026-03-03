@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    // This is the plugin that lets us make a "Fat JAR" with all your libraries included
+    // This is the plugin that lets  make a "Fat JAR" with all your libraries included
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 

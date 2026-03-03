@@ -71,6 +71,22 @@ java -jar lwjgl-visual-novel-x.x.x.jar
 
 ```
 
+### Option 1: Quick Run (Standalone)
+
+1. **Prerequisite:** Ensure **Java 19 or higher** is installed on your system.
+2. Go to the [Releases](https://github.com/sayaka04/lwjgl-visual-novel/releases) page and download the `assets` folder and the `.jar` file.
+3. (Optional) Download the helper script for your OS (`.exe`, `.bat`, or `.sh`).
+4. Place the `assets` folder in the **same directory** as the downloaded files.
+5. **Run:**
+* **Windows:** Double-click the `.exe` or `.bat` file.
+* **Linux/Mac:** Run the `.sh` script (requires `chmod +x`).
+* **Manual:** Run `java -jar lwjgl-visual-novel-x.x.x.jar` in your terminal.
+
+#### IMPORTANT:
+>The `.bat` and `.sh` files are **helper scripts** designed to launch the game conveniently. They require the `.jar` file to be present in the same folder to function.
+
+>For Window `.exe` will suffice without needing to download the `.jar`, still the perequisite is required.
+
 ### Option 2: Development Setup
 
 1. Clone the repository:
