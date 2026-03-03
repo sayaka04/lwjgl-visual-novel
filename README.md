@@ -60,7 +60,38 @@ For version 1.0 of this new engine, the focus was shifted to core architecture a
 
 This project uses Gradle for dependency management.
 
-1. Clone or download the repository to your local machine.
-2. Open the project folder in your preferred Java IDE.
-3. Allow the IDE to sync the Gradle project to download dependencies.
-4. Locate the main entry class (`Game.Main`) and run the application.
+### Option 1: Quick Run (Standalone)
+
+1. Go to the [Releases](https://github.com/sayaka04/lwjgl-visual-novel/releases) page and download the latest `.jar` file (e.g., `lwjgl-visual-novel-x.x.x.jar`).
+2. Download the `assets` folder from this repository.
+3. Place the `assets` folder and the `.jar` file in the **same directory**.
+4. Open your terminal in that directory and run:
+```bash
+java -jar lwjgl-visual-novel-x.x.x.jar
+
+```
+
+### Option 2: Development Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/sayaka04/lwjgl-visual-novel.git
+cd lwjgl-visual-novel
+
+```
+
+
+2. Build the project:
+   Use the included Gradle wrapper to download dependencies and compile the code. This ensures the correct Gradle version (8.7) is used:
+* **Windows:** `.\gradlew build`
+* **Linux/Mac:** `./gradlew build`
+
+
+3. Open and Run:
+* **IDE:** Open the folder in **IntelliJ IDEA** (recommended). It will detect the Gradle files automatically. Locate `Main` and run it.
+* **CLI:** After building, you can also run the project directly using:
+```bash
+.\gradlew run
+
+```
+

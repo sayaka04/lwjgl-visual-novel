@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    // This is the plugin that lets us make a "Fat JAR" with all your libraries included
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 group = "org.example"
@@ -46,4 +48,17 @@ dependencies {
 // Google Gson for JSON parsing
 dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "Main"
+    }
+}
+
+tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    manifest {
+        attributes["Main-Class"] = "Main"
+    }
+    archiveFileName.set("lwjgl-visual-novel-1.0.0.jar")
 }

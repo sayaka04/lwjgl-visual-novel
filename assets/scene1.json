@@ -63,7 +63,7 @@
     "7": {
       "speaker": "System",
       "text": "Chapter 1 Complete! Press to load Chapter 2...",
-      "loadNextScript": "scene2.json"
+        "loadNextScript": "scene2.json"
     }
   }
 }
