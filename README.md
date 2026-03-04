@@ -62,17 +62,6 @@ This project uses Gradle for dependency management.
 
 ### Option 1: Quick Run (Standalone)
 
-1. Go to the [Releases](https://github.com/sayaka04/lwjgl-visual-novel/releases) page and download the latest `.jar` file (e.g., `lwjgl-visual-novel-x.x.x.jar`).
-2. Download the `assets` folder from this repository.
-3. Place the `assets` folder and the `.jar` file in the **same directory**.
-4. Open your terminal in that directory and run:
-```bash
-java -jar lwjgl-visual-novel-x.x.x.jar
-
-```
-
-### Option 1: Quick Run (Standalone)
-
 1. **Prerequisite:** Ensure **Java 19 or higher** is installed on your system.
 2. Go to the [Releases](https://github.com/sayaka04/lwjgl-visual-novel/releases) page and download the `assets` folder and the `.jar` file.
 3. (Optional) Download the helper script for your OS (`.exe`, `.bat`, or `.sh`).
